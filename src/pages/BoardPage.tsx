@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback, useMemo } from "react"
-import type { Issue, IssueStatus, UndoAction, IssueFilters, IssueSortConfig } from "../types"
-import { mockFetchIssues, mockUpdateIssue, calculatePriorityScore } from "../utils/api"
-import { useUser } from "../contexts/UserContext"
-import { KanbanColumn } from "../components/KanbanColumn"
-import { UndoToast } from "../components/UndoToast"
-import { SearchAndFilters } from "../components/SearchAndFilters"
-import { RecentlyAccessedSidebar } from "../components/RecentlyAccessedSidebar"
-import { ReadOnlyBanner } from "../components/ReadOnlyBanner"
+import {useCallback, useEffect, useMemo, useState} from "react"
+import type {Issue, IssueFilters, IssueSortConfig, IssueStatus, UndoAction} from "../types"
+import {calculatePriorityScore, mockFetchIssues, mockUpdateIssue} from "../utils/api"
+import {useUser} from "../contexts/UserContext"
+import {KanbanColumn} from "../components/KanbanColumn"
+import {UndoToast} from "../components/UndoToast"
+import {SearchAndFilters} from "../components/SearchAndFilters"
+import {RecentlyAccessedSidebar} from "../components/RecentlyAccessedSidebar"
+import {ReadOnlyBanner} from "../components/ReadOnlyBanner"
 
 export const BoardPage = () => {
   const [issues, setIssues] = useState<Issue[]>([])
@@ -85,7 +85,7 @@ export const BoardPage = () => {
     }
 
     // Apply sorting
-    const sorted = [...filtered].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       let comparison = 0
 
       switch (sortConfig.field) {
@@ -109,8 +109,6 @@ export const BoardPage = () => {
 
       return sortConfig.direction === "desc" ? comparison : -comparison
     })
-
-    return sorted
   }, [issues, filters, sortConfig])
 
   const uniqueAssignees = useMemo(() => {

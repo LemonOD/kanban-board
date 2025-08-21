@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
-import type { Issue } from "../types"
-import { mockFetchIssue, mockUpdateIssue, calculatePriorityScore } from "../utils/api"
-import { useUser } from "../contexts/UserContext"
-import { addRecentlyAccessedIssue } from "../utils/localStorage"
+import {useEffect, useState} from "react"
+import {Link, useParams} from "react-router-dom"
+import type {Issue} from "../types"
+import {calculatePriorityScore, mockFetchIssue, mockUpdateIssue} from "../utils/api"
+import {useUser} from "../contexts/UserContext"
+import {addRecentlyAccessedIssue} from "../utils/localStorage"
 
 export const IssueDetailPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -88,8 +88,7 @@ export const IssueDetailPage = () => {
   }
 
   const getDaysSinceCreated = (dateString: string) => {
-    const days = Math.floor((Date.now() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24))
-    return days
+    return Math.floor((Date.now() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24))
   }
 
   if (loading) {
