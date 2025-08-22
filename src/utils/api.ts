@@ -11,10 +11,10 @@ export const mockFetchIssues = (): Promise<Issue[]> => {
 export const mockUpdateIssue = (issueId: string, updates: Partial<Issue>): Promise<Issue> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (Math.random() < 0.9) {
+      if (Math.random() < 0.98) {
         resolve({ id: issueId, ...updates } as Issue)
       } else {
-        reject(new Error("Failed to update issue"))
+        reject(new Error("Network error: Failed to update issue"))
       }
     }, 500)
   })

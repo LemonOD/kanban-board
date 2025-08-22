@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import type { RecentlyAccessedIssue } from "../types"
-import { getRecentlyAccessedIssues } from "../utils/localStorage"
+import { getRecentlyAccessedIssues } from "../../utils/localStorage"
+import { RecentlyAccessedIssue } from "../../types"
 
 export const RecentlyAccessedSidebar = () => {
   const [recentIssues, setRecentIssues] = useState<RecentlyAccessedIssue[]>([])
@@ -56,7 +56,7 @@ export const RecentlyAccessedSidebar = () => {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-20 right-4 z-40 bg-white border border-gray-300 rounded-lg p-2 shadow-lg hover:shadow-xl transition-shadow"
+        className={`fixed top-20 right-4 ${!isOpen ? 'z-40' : ''} bg-white border border-gray-300 rounded-lg p-2 shadow-lg hover:shadow-xl transition-shadow`}
         aria-label="Toggle recently accessed issues"
       >
         <div className="flex items-center space-x-2">
@@ -68,7 +68,6 @@ export const RecentlyAccessedSidebar = () => {
               d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span className="text-sm text-gray-600">Recent</span>
           {recentIssues.length > 0 && (
             <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
               {recentIssues.length}
@@ -79,7 +78,7 @@ export const RecentlyAccessedSidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white border-l border-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out z-30 ${
+        className={`fixed top-0 pt-10 right-0 w-80 bg-white border-l border-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out z-30 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
