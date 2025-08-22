@@ -4,12 +4,14 @@ import { IssueDetailPage } from "./pages/IssueDetailPage"
 import { SettingsPage } from "./pages/SettingsPage"
 import { Navigation } from "./components/Navigation"
 import { UserProvider } from "./contexts/UserContext"
+import { ThemeProvider } from "./contexts/ThemeContext"
 
 function App() {
   return (
+      <ThemeProvider>
       <UserProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
             <Navigation />
             <main className="max-w-7xl mx-auto px-4 py-6">
               <Routes>
@@ -22,6 +24,7 @@ function App() {
           </div>
         </Router>
       </UserProvider>
+      </ThemeProvider>
   );
 }
 

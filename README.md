@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+# React Kanban Issue Board
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based Kanban board clone application for managing issues with drag-and-drop functionality, search/filter capabilities, and role-based access control.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Board View**: Display issues in Backlog, In Progress, and Done columns
+- **Issue Management**: Move issues between columns with optimistic updates
+- **Search & Filter**: Live search by title/tags, filter by assignee/severity
+- **Priority Scoring**: Custom algorithm for issue prioritization
+- **Recently Accessed**: Track and display last 5 visited issues
+- **Role-Based Access**: Admin and contributor permissions
+- **Undo Functionality**: 5-second undo window for issue updates
+- **Real-time Updates**: Polling every 10 seconds
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prerequisites
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Node.js (v14 or higher)
+- npm or yarn
 
-### `npm test`
+### Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone or extract the project
+2. Install dependencies:
+   \`\`\`bash
+   npm install
+   \`\`\`
 
-### `npm run build`
+3. Start the development server:
+   \`\`\`bash
+   npm start
+   \`\`\`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Available Scripts
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `npm start` - Runs the app in development mode
+- `npm test` - Launches the test runner
+- `npm run build` - Builds the app for production
+- `npm run eject` - Ejects from Create React App (one-way operation)
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+\`\`\`
+src/
+├── components/          # Reusable UI components
+├── pages/              # Page components (Board, Issue Detail, Settings)
+├── contexts/           # React contexts (User context)
+├── data/               # Sample data (issues.json)
+├── utils/              # Utility functions (API, localStorage)
+├── constants/          # App constants (current user)
+├── types.ts            # TypeScript type definitions
+└── App.tsx             # Main app component with routing
+\`\`\`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### User Roles
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **Admin**: Can move issues, update priorities, mark as resolved
+- **Contributor**: Read-only access to view issues
 
-## Learn More
+Switch between roles in the Settings page for testing.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Key Components
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **BoardPage**: Main Kanban board with three columns
+- **IssueDetailPage**: Detailed view of individual issues
+- **SearchAndFilters**: Search and filtering controls
+- **RecentlyAccessedSidebar**: Quick access to recently viewed issues
