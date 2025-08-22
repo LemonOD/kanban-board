@@ -7,9 +7,9 @@ import { useUser } from "../../contexts/UserContext"
 import { calculatePriorityScore, mockFetchIssues, mockUpdateIssue } from "../../utils/api"
 import { SearchAndFilters } from "./SearchAndFilters"
 import { KanbanColumn } from "./KanbanColumn"
-import { UndoToast } from "../UndoToast"
 import SkeletonLoader from "../loader/SkeletonLoader"
 import { Link } from "react-router-dom"
+import { UndoToast } from "../reusables/UndoToast"
 
 export const BoardContainer = () => {
   const [issues, setIssues] = useState<Issue[]>([])
