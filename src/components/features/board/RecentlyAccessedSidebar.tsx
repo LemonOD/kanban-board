@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { getRecentlyAccessedIssues } from "../../utils/localStorage"
-import { RecentlyAccessedIssue } from "../../types"
+import { getRecentlyAccessedIssues } from "../../../utils/localStorage"
+import { RecentlyAccessedIssue } from "../../../types"
 
 export const RecentlyAccessedSidebar = () => {
   const [recentIssues, setRecentIssues] = useState<RecentlyAccessedIssue[]>([])

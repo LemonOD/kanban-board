@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
-import type { IssueFilters, IssueSortConfig } from "../../types"
-import { useTheme } from "../../contexts/ThemeContext"
+import type { IssueFilters, IssueSortConfig } from "../../../types"
+import { AssigneeSelect } from "../../reusables/AssigneeSelect"
+import { SeveritySelect } from "../../reusables/SeveritySelect"
 
 interface SearchAndFiltersProps {
   filters: IssueFilters
@@ -22,7 +23,6 @@ export const SearchAndFilters = ({
   assignees,
 }: SearchAndFiltersProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const { theme } = useTheme()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Close dropdown when clicking outside
@@ -76,13 +76,6 @@ export const SearchAndFilters = ({
     filters.tags.length > 0,
   ].filter(Boolean).length
 
-  const severityOptions = [
-  { value: "", label: "All Severities" },
-  { value: "1", label: "Low (1)" },
-  { value: "2", label: "Medium (2)" },
-  { value: "3", label: "High (3)" },
-]
-
   const commonTags = ["auth", "bug", "performance", "ui", "feature", "security"]
 
   return (
@@ -95,13 +88,13 @@ export const SearchAndFilters = ({
             placeholder="Search by title or tags..."
             value={filters.search}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:border-transparent transition-colors"
           />
         </div>
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="relative px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center gap-2"
+          className="relative px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -155,35 +148,18 @@ export const SearchAndFilters = ({
           </div>
 
           {/* Assignee Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Assignee</label>
-            <select
-              value={filters.assignee}
-              onChange={(e) => handleAssigneeChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            >
-              <option value="">All Assignees</option>
-              {assignees.map((assignee) => (
-                <option key={assignee} value={assignee}>
-                  {assignee}
-                </option>
-              ))}
-            </select>
-          </div>
+          <AssigneeSelect
+            assignees={assignees}
+            value={filters.assignee}
+            onChange={handleAssigneeChange}
+          />
 
           {/* Severity Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Severity</label>
-            <select
-              value={filters.severity?.toString() || ""}
-              onChange={(e) => handleSeverityChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            >
-              {severityOptions.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </div>
+          
+           <SeveritySelect
+              value={filters.severity as any || ""}
+              onChange={(value) => handleSeverityChange(value as any)}
+          />
 
           {/* Tag Filters */}
           <div>

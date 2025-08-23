@@ -1,4 +1,4 @@
-import { IssueDetails } from "../components/issueDetails/IssueDetails"
+import { IssueDetails } from "../components/features/issueDetails/IssueDetails"
 
 export const IssueDetailPage = () => {
   

@@ -17,7 +17,23 @@ describe("Priority Score Calculation", () => {
 
   beforeAll(() => {
     // Mock Date.now() to return a consistent timestamp for testing
-    jest.spyOn(Date, "now").mockReturnValue(new Date("2024-01-11T00:00:00.000Z").getTime())
+    const mockDate = new Date("2024-01-11T00:00:00.000Z")
+    jest.spyOn(Date, "now").mockReturnValue(mockDate.getTime())
+    
+    // Also mock the Date constructor to ensure consistent behavior
+    const OriginalDate = global.Date
+    global.Date = class extends OriginalDate {
+      constructor(...args: any[]) {
+        if (args.length === 0) {
+          return new OriginalDate("2024-01-11T00:00:00.000Z")
+        }
+        return new OriginalDate(...args)
+      }
+      
+      static now() {
+        return mockDate.getTime()
+      }
+    } as any
   })
 
   afterAll(() => {
@@ -99,7 +115,22 @@ describe("Issue Sorting Logic", () => {
   })
 
   beforeAll(() => {
-    jest.spyOn(Date, "now").mockReturnValue(new Date("2024-01-11T00:00:00.000Z").getTime())
+    const mockDate = new Date("2024-01-11T00:00:00.000Z")
+    jest.spyOn(Date, "now").mockReturnValue(mockDate.getTime())
+    
+    const OriginalDate = global.Date
+    global.Date = class extends OriginalDate {
+      constructor(...args: any[]) {
+        if (args.length === 0) {
+          return new OriginalDate("2024-01-11T00:00:00.000Z")
+        }
+        return new OriginalDate(...args)
+      }
+      
+      static now() {
+        return mockDate.getTime()
+      }
+    } as any
   })
 
   afterAll(() => {

@@ -24,8 +24,8 @@ export const PollingSettings: React.FC<PollingSettingsProps> = ({
     const borderClass = isDark ? "border-gray-700" : "border-gray-200";
     const labelTextClass = isDark ? "text-gray-300" : "text-gray-700";
     const selectClass = isDark
-        ? "bg-gray-800 text-gray-100 border-gray-700 focus:ring-blue-400"
-        : "bg-white text-gray-900 border-gray-300 focus:ring-blue-500";
+        ? "bg-gray-800 text-gray-100 border-gray-700 "
+        : "bg-white text-gray-900 border-gray-300";
 
     return (
         <div className={`${bgClass} rounded-lg border ${borderClass} shadow-sm p-6`}>
@@ -39,7 +39,7 @@ export const PollingSettings: React.FC<PollingSettingsProps> = ({
                         <select
                             value={pollingInterval}
                             onChange={(e) => handlePollingIntervalChange(Number(e.target.value))}
-                            className={`px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${selectClass}`}
+                            className={`px-3 py-2 border rounded-md focus:outline-none ${selectClass}`}
                         >
                             {intervalOptions.map((option) => (
                                 <option key={option.value} value={option.value}>
