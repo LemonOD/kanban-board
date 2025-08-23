@@ -22,13 +22,6 @@ import { useRelativeTime } from "../../../hooks/useRelativeTime"
 import { usePolling } from "../../../hooks/usePolling"
 import { usePollingContext } from "../../../contexts/PollingContext"
 
-const DEFAULT_POLL_INTERVAL = 10; // seconds
-
-function getPollInterval() {
-  const value = localStorage.getItem("pollInterval");
-  const parsed = value ? parseInt(value, 10) : NaN;
-  return !isNaN(parsed) && parsed > 0 ? parsed : DEFAULT_POLL_INTERVAL;
-}
 
 export const BoardContainer = () => {
   const [issues, setIssues] = useState<Issue[]>([])
@@ -66,7 +59,7 @@ export const BoardContainer = () => {
 
   const columns: IssueStatus[] = ["Backlog", "In Progress", "Done"]
 
-  const loadIssuesFromServer = useCallback(async () => {
+  const loadIssuesFromServer = useCallback(async () => {    
     try {
       // initial load from localStorage
       const localIssues = loadIssues() || []
@@ -112,8 +105,8 @@ export const BoardContainer = () => {
 
   // initial load on mount
   useEffect(() => {
-    loadIssuesFromServer();
-  }, [loadIssuesFromServer]);
+      loadIssuesFromServer();
+  }, []);
 
   // polling logic replaces the old useEffect
   const { pollingInterval } = usePollingContext()

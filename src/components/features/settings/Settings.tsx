@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import { RoleTesting } from "./RoleTesting"
 import { PollingSettings } from "./PollingSettings"
 import RoleInformation from "./RoleInformation"
