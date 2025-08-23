@@ -43,13 +43,23 @@ export const IssueCard = ({
     disabled: !canMoveIssues,
   });
 
-  const style = transform
+  const style: React.CSSProperties | undefined = transform
+  ? isDragging
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        zIndex: isDragging ? 9998 : "auto",
-        width: isDragging ? "300px" : "auto",
+        zIndex: 9999,
+        position: "fixed",
+        width: "350px",
       }
-    : undefined;
+    : {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        position: "relative",
+        zIndex: "auto",
+        width: "auto",
+        pointerEvents: "auto",
+      }
+  : undefined;
+
 
   const getPriorityColor = (priority: string) =>
     PRIORITY_COLORS[priority] || PRIORITY_COLORS.default;
