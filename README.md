@@ -51,6 +51,7 @@ src/
 ├── contexts/           # React contexts (User context)
 ├── data/               # Sample data (issues.json)
 ├── utils/              # Utility functions (API, localStorage)
+├── hooks/              # Reack hooks (Polling, RelativeTime)
 ├── constants/          # App constants (current user)
 ├── types.ts            # TypeScript type definitions
 └── App.tsx             # Main app component with routing

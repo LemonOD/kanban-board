@@ -1,4 +1,4 @@
-import { BoardContainer } from "../components/board/BoardContainer"
+import { BoardContainer } from "../components/features/board/BoardContainer"
 
 export const BoardPage = () => {
   return (

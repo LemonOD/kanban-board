@@ -5,26 +5,32 @@ import { SettingsPage } from "./pages/SettingsPage"
 import { Navigation } from "./components/Navigation"
 import { UserProvider } from "./contexts/UserContext"
 import { ThemeProvider } from "./contexts/ThemeContext"
+import { ToastProvider } from "./contexts/ToastContext"
+import { PollingProvider } from "./contexts/PollingContext"
 
 function App() {
   return (
-      <ThemeProvider>
+    <ThemeProvider>
       <UserProvider>
-        <Router>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-            <Navigation />
-            <main className="max-w-7xl mx-auto px-4 py-6">
-              <Routes>
-                <Route path="/board" element={<BoardPage />} />
-                <Route path="/issue/:id" element={<IssueDetailPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="*" element={<Navigate to="/board" />} />
-              </Routes>
-            </main>
-          </div>
-        </Router>
+        <ToastProvider>
+          <PollingProvider>
+            <Router>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+              <Navigation />
+              <main className="max-w-7xl mx-auto px-4 py-6">
+                <Routes>
+                  <Route path="/board" element={<BoardPage />} />
+                  <Route path="/issue/:id" element={<IssueDetailPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="*" element={<Navigate to="/board" />} />
+                </Routes>
+              </main>
+            </div>
+          </Router>
+          </PollingProvider>
+        </ToastProvider>
       </UserProvider>
-      </ThemeProvider>
+    </ThemeProvider>
   );
 }
 

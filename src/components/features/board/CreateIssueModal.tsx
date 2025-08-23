@@ -1,7 +1,11 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Issue, IssueStatus } from "../../types"
+import { Issue, IssueStatus } from "../../../types"
+import { AssigneeSelect } from "../../reusables/AssigneeSelect"
+import { Button } from "../../reusables/Button"
+import { PrioritySelect } from "../../reusables/PrioritySelect"
+import { SeveritySelect } from "../../reusables/SeveritySelect"
 
 interface CreateIssueModalProps {
     isOpen: boolean
@@ -18,6 +22,8 @@ export const CreateIssueModal = ({ isOpen, onClose, onCreateIssue, defaultStatus
         severity: 2,
         tags: "",
     })
+
+    const uniqueAssignees = ["Alice", "Bob", "Charlie"] 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -49,23 +55,29 @@ export const CreateIssueModal = ({ isOpen, onClose, onCreateIssue, defaultStatus
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div 
+        aria-modal="true" 
+        role="dialog"
+        aria-labelledby="modal-title" 
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Create New Issue</h2>
-                    <button
+                    <h2 id="modal-title" className="text-xl font-semibold">Create New Issue</h2>
+                    <Button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                        variant="ghost"
+                        size="sm"
+                        className="!p-1 !min-w-0 text-gray-400 hover:!text-gray-600 text-xl font-bold"
                         aria-label="Close modal"
                     >
-                        ×
-                    </button>
+                        x
+                    </Button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                            Title *
+                            Title <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -79,51 +91,25 @@ export const CreateIssueModal = ({ isOpen, onClose, onCreateIssue, defaultStatus
                     </div>
 
                     <div>
-                        <label htmlFor="assignee" className="block text-sm font-medium text-gray-700 mb-1">
-                            Assignee
-                        </label>
-                        <input
-                            type="text"
-                            id="assignee"
+                        <AssigneeSelect
+                            assignees={uniqueAssignees}
                             value={formData.assignee}
-                            onChange={(e) => setFormData({ ...formData, assignee: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter assignee name"
-                        />
+                            onChange={(value: string) => setFormData({ ...formData, assignee: value })}
+                            />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
-                                Priority
-                            </label>
-                            <select
-                                id="priority"
-                                value={formData.priority}
-                                onChange={(e) => setFormData({ ...formData, priority: e.target.value as Issue["priority"] })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
-                            </select>
-                        </div>
+                        <PrioritySelect
+                            value={formData.priority}
+                            onChange={(priority) => setFormData({ ...formData, priority: priority as Issue["priority"] })}
+                            required={true}
+                        />
 
-                        <div>
-                            <label htmlFor="severity" className="block text-sm font-medium text-gray-700 mb-1">
-                                Severity
-                            </label>
-                            <select
-                                id="severity"
-                                value={formData.severity}
-                                onChange={(e) => setFormData({ ...formData, severity: Number.parseInt(e.target.value) })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value={1}>1 - Low</option>
-                                <option value={2}>2 - Medium</option>
-                                <option value={3}>3 - High</option>
-                            </select>
-                        </div>
+                        <SeveritySelect
+                            value={formData.severity}
+                            onChange={(severity) => setFormData({ ...formData, severity: severity as number })}
+                            required={true}
+                        />
                     </div>
 
                     <div>
@@ -142,19 +128,12 @@ export const CreateIssueModal = ({ isOpen, onClose, onCreateIssue, defaultStatus
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        >
+                        <Button type="button" onClick={onClose} variant="secondary">
                             Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        </Button>
+                        <Button type="submit" variant="primary">
                             Create Issue
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

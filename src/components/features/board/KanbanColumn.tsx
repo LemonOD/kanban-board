@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDroppable } from "@dnd-kit/core"
-import type { Issue, IssueStatus } from "../../types"
+import type { Issue, IssueStatus } from "../../../types"
 import { CreateIssueModal } from "./CreateIssueModal"
 import { IssueCard } from "./IssueCard"
 
