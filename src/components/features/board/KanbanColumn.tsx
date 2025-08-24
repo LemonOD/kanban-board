@@ -41,16 +41,20 @@ const headerColors: Record<IssueStatus, string> = {
           <h2 className="font-semibold text-lg">
             {title} ({issues.length})
           </h2>
-          <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="w-6 h-6 rounded-full bg-white dark:bg-gray-600 bg-opacity-50 dark:bg-opacity-50 
-              hover:bg-opacity-75 dark:hover:bg-opacity-75 flex items-center justify-center text-sm font-bold 
-              transition-colors text-gray-700 dark:text-gray-200"
-              title={`Add new issue to ${title}`}
-              aria-label={`Add new issue to ${title}`}
-          >
-            +
-          </button>
+          {
+            canMoveIssues && (
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="w-6 h-6 rounded-full bg-white dark:bg-gray-600 bg-opacity-50 dark:bg-opacity-50 
+                hover:bg-opacity-75 dark:hover:bg-opacity-75 flex items-center justify-center text-sm font-bold 
+                transition-colors text-gray-700 dark:text-gray-200"
+                title={`Add new issue to ${title}`}
+                aria-label={`Add new issue to ${title}`}
+              >
+                +
+              </button>
+            )
+          }
         </div>
         <div className="flex-1 overflow-hidden">
           {issues.length === 0 ? (
