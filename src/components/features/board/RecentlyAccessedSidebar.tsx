@@ -2,6 +2,40 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { getRecentlyAccessedIssues } from "../../../utils/localStorage"
 import { RecentlyAccessedIssue } from "../../../types"
+import { useRelativeTime } from "../../../hooks/useRelativeTime"
+
+// Separate component for each issue item to use hooks properly
+const IssueItem = ({ issue, index, onClose }: { issue: RecentlyAccessedIssue; index: number; onClose: () => void }) => {
+  const timeAgo = useRelativeTime(new Date(issue.accessedAt))
+  
+  return (
+    <Link
+      key={`${issue.id}-${issue.accessedAt}`}
+      to={`/issue/${issue.id}`}
+      onClick={onClose}
+      className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition-colors border border-gray-200"
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center space-x-2 mb-1">
+            <span className="text-sm font-medium text-blue-600">#{issue.id}</span>
+            <span className="text-xs text-gray-500">#{index + 1}</span>
+          </div>
+          <h3 className="text-sm font-medium text-gray-900 truncate">{issue.title}</h3>
+          <p className="text-xs text-gray-500 mt-1">{timeAgo}</p>
+        </div>
+        <svg
+          className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </Link>
+  )
+}
 
 export const RecentlyAccessedSidebar = () => {
   const [recentIssues, setRecentIssues] = useState<RecentlyAccessedIssue[]>([])
@@ -38,18 +72,8 @@ export const RecentlyAccessedSidebar = () => {
     }
   }, [])
 
-  const formatTimeAgo = (timestamp: number) => {
-    const now = Date.now()
-    const diff = now - timestamp
-    const minutes = Math.floor(diff / (1000 * 60))
-    const hours = Math.floor(diff / (1000 * 60 * 60))
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
-    if (minutes < 1) return "Just now"
-    if (minutes < 60) return `${minutes}m ago`
-    if (hours < 24) return `${hours}h ago`
-    return `${days}d ago`
-  }
+
 
   return (
     <>
@@ -113,35 +137,16 @@ export const RecentlyAccessedSidebar = () => {
                 <p className="text-gray-500">Click on issues to see them here</p>
               </div>
             ) : (
-              <div className="p-4 space-y-3">
-                {recentIssues.map((issue, index) => (
-                  <Link
-                    key={`${issue.id}-${issue.accessedAt}`}
-                    to={`/issue/${issue.id}`}
-                    onClick={() => setIsOpen(false)}
-                    className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition-colors border border-gray-200"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <span className="text-sm font-medium text-blue-600">#{issue.id}</span>
-                          <span className="text-xs text-gray-500">#{index + 1}</span>
-                        </div>
-                        <h3 className="text-sm font-medium text-gray-900 truncate">{issue.title}</h3>
-                        <p className="text-xs text-gray-500 mt-1">{formatTimeAgo(issue.accessedAt)}</p>
-                      </div>
-                      <svg
-                        className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                             <div className="p-4 space-y-3">
+                 {recentIssues.map((issue, index) => (
+                   <IssueItem
+                     key={`${issue.id}-${issue.accessedAt}`}
+                     issue={issue}
+                     index={index}
+                     onClose={() => setIsOpen(false)}
+                   />
+                 ))}
+               </div>
             )}
           </div>
 
