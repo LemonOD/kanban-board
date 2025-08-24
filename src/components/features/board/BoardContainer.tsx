@@ -27,6 +27,10 @@ export const BoardContainer = () => {
   const [issues, setIssues] = useState<Issue[]>([])
   const [loading, setLoading] = useState(true)
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null)
+  const [hasInitialLoad, setHasInitialLoad] = useState(() => {
+    // Check if we've already done initial load in this session
+    return localStorage.getItem('board-initial-load') === 'true'
+  })
   
   const { canMoveIssues } = useUser()
   const { showSuccess, showError, showToast } = useToast()
@@ -59,12 +63,12 @@ export const BoardContainer = () => {
 
   const columns: IssueStatus[] = ["Backlog", "In Progress", "Done"]
 
-  const loadIssuesFromServer = useCallback(async () => {    
+  const loadIssuesFromServer = useCallback(async (isInitialLoad = false) => {    
     try {
       // initial load from localStorage
       const localIssues = loadIssues() || []
       
-      if (localIssues.length > 0) {
+      if (localIssues.length > 0 ) {
         setIssues(localIssues)
        
         setTimeout(() => {
@@ -80,38 +84,54 @@ export const BoardContainer = () => {
       saveIssues(mergedIssues)
       setLastSyncTime(new Date())
       
-      if (localIssues.length === 0) {
+      if (localIssues.length === 0 ) {
         setTimeout(() => {
           toastRefs.current.showSuccess("Issues loaded successfully")
         }, 100)
       }
     } catch (err) {
-      setTimeout(() => {
-          toastRefs.current.showError("Error loading issues")
-        }, 100)
+        setTimeout(() => {
+            toastRefs.current.showError("Error loading issues")
+          }, 100)
+      
       
       // Fallback to localStorage if available
       const localIssues = loadIssues() || []
-      if (localIssues.length > 0) {
+      if (localIssues.length > 0 ) {
         setIssues(localIssues)
         setTimeout(() => {
           toastRefs.current.showToast("Using cached data - some features may be limited", "warning", undefined, 4000)
         }, 100)
       }
-    } finally {
-      setLoading(false)
-    }
+         } finally {
+       if (isInitialLoad) {
+         setLoading(false)
+         setHasInitialLoad(true)
+         localStorage.setItem('board-initial-load', 'true')
+       }
+     }
   }, [])
 
   // initial load on mount
   useEffect(() => {
-      loadIssuesFromServer();
-  }, []);
+      if (!hasInitialLoad) {
+        loadIssuesFromServer(true);
+      } else {
+        // If we've already loaded, just set loading to false and load from localStorage
+        const localIssues = loadIssues() || []
+        if (localIssues.length > 0) {
+          setIssues(localIssues)
+        }
+        setLoading(false)
+      }
+  }, [hasInitialLoad, loadIssuesFromServer]);
 
   // polling logic replaces the old useEffect
   const { pollingInterval } = usePollingContext()
 
-  usePolling(loadIssuesFromServer, pollingInterval)
+  usePolling(() => loadIssuesFromServer(false), pollingInterval)
+
+
 
   const filteredAndSortedIssues = useMemo(() => {
     let filtered = issues.filter((issue) => {
@@ -263,16 +283,14 @@ export const BoardContainer = () => {
   return (
     <div className="pt-20 flex gap-6">
       <div className="flex-1">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Kanban Board</h1>
-          <div className="flex items-center space-x-4">
-            {lastSyncTime && (
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                Last synced: {relativeSyncTime}
-              </span>
-            )}
-          </div>
-        </div>
+                 <div className="flex justify-between items-center mb-6">
+           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Kanban Board</h1>
+           <div className="flex items-center space-x-4">
+             <span className="text-sm text-gray-500 dark:text-gray-400">
+               Last synced: {lastSyncTime ? relativeSyncTime : 'just now'}
+             </span>
+           </div>
+         </div>
 
         {!canMoveIssues && <ReadOnlyBanner />}
 
